@@ -1,7 +1,8 @@
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head } from '@inertiajs/react';
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
+import { Head } from '@inertiajs/react'
+import FilesDataTable from '@/Components/FilesDataTable'
 
-export default function Dashboard() {
+export default function Dashboard({ files }) {
     return (
         <AuthenticatedLayout
             header={
@@ -14,13 +15,14 @@ export default function Dashboard() {
 
             <div className="py-12">
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                    <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
-                        <div className="p-6 text-gray-900">
-                            You're logged in!
-                        </div>
+                    <div className="mb-8">
+                        <h3 className="text-lg font-medium text-gray-900 mb-4">
+                            File Upload History
+                        </h3>
+                        <FilesDataTable data={files} />
                     </div>
                 </div>
             </div>
         </AuthenticatedLayout>
-    );
+    )
 }
