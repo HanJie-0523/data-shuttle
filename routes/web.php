@@ -14,6 +14,7 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
+Route::post('/dashboard/upload-file', [App\Http\Controllers\DashboardController::class, 'uploadFile'])->middleware(['auth', 'verified'])->name('dashboard.upload-file');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');

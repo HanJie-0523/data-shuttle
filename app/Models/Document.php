@@ -12,6 +12,9 @@ class Document extends Model
     protected $fillable = [
         'name',
         'status',
+        'file_path',
+        'imported_count',
+        'error_count',
     ];
 
     protected function casts(): array

@@ -15,6 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->enum('status', ['pending', 'processing', 'failed', 'completed'])->default('pending');
+            $table->string('file_path');
+            $table->integer('imported_count')->default(0);
+            $table->integer('error_count')->default(0);
             $table->timestamps();
         });
     }
