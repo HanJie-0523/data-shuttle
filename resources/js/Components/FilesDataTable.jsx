@@ -27,26 +27,45 @@ const FilesDataTable = ({ data }) => {
                 ),
             },
             {
+                accessorKey: 'imported_count',
+                header: 'Imported Count',
+                cell: ({ getValue }) => (
+                    <div className="text-sm font-medium text-gray-900">
+                        {getValue()}
+                    </div>
+                ),
+            },
+            {
+                accessorKey: 'error_count',
+                header: 'Error Count',
+                cell: ({ getValue }) => (
+                    <div className="text-sm font-medium text-gray-900">
+                        {getValue()}
+                    </div>
+                ),
+            },
+            {
                 accessorKey: 'status',
                 header: 'Status',
                 cell: ({ getValue }) => {
                     const status = getValue()
                     const statusConfig = {
-                        pending: { variant: 'secondary', label: 'Pending' },
-                        processing: { variant: 'default', label: 'Processing' },
-                        completed: { variant: 'default', label: 'Completed' },
-                        failed: { variant: 'destructive', label: 'Failed' },
+                        pending: { variant: 'secondary', label: 'Pending', className: 'bg-yellow-400 text-black hover:bg-yellow-500' },
+                        processing: { variant: 'default', label: 'Processing', className: 'bg-blue-500 text-white hover:bg-blue-600' },
+                        completed: { variant: 'default', label: 'Completed', className: 'bg-green-500 text-white hover:bg-green-600' },
+                        failed: { variant: 'destructive', label: 'Failed', className: 'bg-red-500 text-white hover:bg-red-600' },
                     }
 
-                    const config = statusConfig[status] || { variant: 'secondary', label: status }
+                    const config = statusConfig[status] || { variant: 'secondary', label: status, className: 'bg-gray-500 text-white hover:bg-gray-600' }
 
                     return (
-                        <Badge variant={config.variant}>
+                        <Badge variant={config.variant} className={config.className}>
                             {config.label}
                         </Badge>
                     )
                 },
             },
+
         ],
         []
     )
