@@ -28,7 +28,7 @@ class DashboardController extends Controller
     public function uploadFile(Request $request)
     {
         $request->validate([
-            'file' => 'required|file|mimes:csv,txt|max:10240',
+            'file' => 'required|file|mimes:csv,txt',
         ]);
 
         $file = $request->file('file');

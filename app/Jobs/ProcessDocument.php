@@ -96,6 +96,9 @@ class ProcessDocument implements ShouldQueue
     private function readCsvFile(string $filePath): array
     {
         $content = Storage::get($filePath);
+
+        $content = preg_replace('/^\xEF\xBB\xBF/', '', $content);
+
         $lines = explode("\n", $content);
         $csvData = [];
 

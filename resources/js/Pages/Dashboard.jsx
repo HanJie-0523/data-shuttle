@@ -10,18 +10,20 @@ export default function Dashboard({ files }) {
         file: null,
     })
 
-    usePoll(2000, {
-        only: ['files']
-    })
+    const { start } = usePoll(2000, {
+        only: ['files'],
+    }, {
+        autoStart: false}
+    )
 
     const submit = (e) => {
         e.preventDefault()
         post(route('dashboard.upload-file'), {
             onSuccess: () => {
                 reset()
+                start()
             },
             onError: (errors) => {
-                // Errors are automatically handled by Inertia
                 console.log('Upload errors:', errors)
             }
         })
