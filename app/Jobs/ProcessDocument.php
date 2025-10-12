@@ -151,9 +151,33 @@ class ProcessDocument implements ShouldQueue
 
         // Map each field using the column mapping
         foreach ($columnMapping as $dbField => $columnIndex) {
-            $productData[$dbField] = $row[$columnIndex] ?? '';
+            $value = $row[$columnIndex] ?? '';
+
+            // Clean up non-UTF-8 / HTML entities / invisible chars
+            $productData[$dbField] = $this->cleanText($value);
         }
 
         return $productData;
+    }
+
+    /**
+     * Clean up non-UTF-8 and unwanted characters
+     */
+    private function cleanText(string $text): string
+    {
+        // Convert to UTF-8 if not already
+        $text = mb_convert_encoding($text, 'UTF-8', 'UTF-8');
+
+        // Remove invalid UTF-8 bytes
+        $text = preg_replace('/[^\PC\s]/u', '', $text);
+
+        // Decode HTML entities like &#174; → ®
+        $text = html_entity_decode($text, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+
+        // Remove control characters except line breaks and tabs
+        $text = preg_replace('/[^\P{C}\t\n\r]/u', '', $text);
+
+        // Trim extra whitespace
+        return trim($text);
     }
 }
