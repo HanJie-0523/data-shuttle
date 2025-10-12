@@ -1,14 +1,12 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
 import { Head } from '@inertiajs/react'
 import FilesDataTable from '@/Components/FilesDataTable'
+import DragDropFileUpload from '@/Components/DragDropFileUpload'
 import { Button } from '@/Components/ui/button'
-import { Input } from '@/Components/ui/input'
 import { useForm } from '@inertiajs/react'
-import { useRef } from 'react'
 
 export default function Dashboard({ files }) {
-    const fileInputRef = useRef(null)
-    const { setData, post, reset } = useForm({
+    const { data, setData, post, reset } = useForm({
         file: null,
     })
 
@@ -17,11 +15,16 @@ export default function Dashboard({ files }) {
         post(route('dashboard.upload-file'), {
             onSuccess: () => {
                 reset()
-                if (fileInputRef.current) {
-                    fileInputRef.current.value = ''
-                }
             }
         })
+    }
+
+    const handleFileSelect = (file) => {
+        setData('file', file)
+    }
+
+    const handleRemoveFile = () => {
+        setData('file', null)
     }
 
     return (
@@ -36,30 +39,30 @@ export default function Dashboard({ files }) {
 
             <div className="py-12">
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                    <div className="mb-8">
+                    <div className="mb-8 space-y-8">
                         <h3 className="text-lg font-medium text-gray-900 mb-4">
                             File Upload History
                         </h3>
 
-                        <div className="p-6 border my-6 flex items-center justify-between">
-                            <span>
-                                Select file/Drag and drop
-                            </span>
-                            <form onSubmit={submit} className="flex gap-2" >
-                                <div>
-                                    <Input
-                                        ref={fileInputRef}
-                                        type="file"
-                                        onChange={e => setData('file', e.target.files[0])}
-                                    />
+                        <form onSubmit={submit} className="space-y-4">
+                            <DragDropFileUpload
+                                onFileSelect={handleFileSelect}
+                                onRemoveFile={handleRemoveFile}
+                                selectedFile={data.file}
+                                accept=".csv,.txt"
+                            />
+
+                            {data.file && (
+                                <div className="flex justify-center">
+                                    <Button
+                                        type="submit"
+                                        className="bg-green-600 hover:bg-green-700 min-w-[120px]"
+                                    >
+                                        Upload File
+                                    </Button>
                                 </div>
-                                <Button
-                                    type="submit"
-                                >
-                                    Upload File
-                                </Button>
-                            </form>
-                        </div>
+                            )}
+                        </form>
                         <FilesDataTable data={files} />
                     </div>
                 </div>
