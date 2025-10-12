@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\ProcessDocument;
 use App\Models\Document;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -30,19 +31,19 @@ class DashboardController extends Controller
             'file' => 'required|file|mimes:csv,txt|max:10240',
         ]);
 
-        // Store the uploaded file
         $file = $request->file('file');
         $fileName = time() . '_' . $file->getClientOriginalName();
         $filePath = $file->storeAs('uploads', $fileName);
 
-        // Create document record
-        Document::create([
+        $document = Document::create([
             'name' => $file->getClientOriginalName(),
             'status' => 'pending',
             'file_path' => $filePath,
             'imported_count' => 0,
             'error_count' => 0,
         ]);
+
+        ProcessDocument::dispatch($document);
 
         return redirect()->route('dashboard');
     }
