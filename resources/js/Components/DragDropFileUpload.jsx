@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react'
 import { X, Upload } from 'lucide-react'
 
-export default function DragDropFileUpload({ onFileSelect, accept, disabled = false, selectedFile = null, onRemoveFile }) {
+export default function DragDropFileUpload({ onFileSelect, accept, disabled = false, selectedFile = null, onRemoveFile, hasError = false }) {
     const fileInputRef = useRef(null)
     const [isDragOver, setIsDragOver] = useState(false)
 
@@ -60,13 +60,16 @@ export default function DragDropFileUpload({ onFileSelect, accept, disabled = fa
 
     const baseClasses = "relative border-2 border-dashed rounded-lg p-8 transition-all duration-200 cursor-pointer"
     const disabledClasses = "opacity-50 cursor-not-allowed"
+    const errorClasses = "border-red-500 bg-red-50"
     const dragOverClasses = "border-blue-500 bg-blue-50 scale-105"
     const normalClasses = "border-gray-300 hover:border-gray-400 hover:bg-gray-50"
 
     const containerClasses = `
         ${baseClasses}
         ${disabled ? disabledClasses : ''}
-        ${isDragOver && !disabled ? dragOverClasses : normalClasses}
+        ${hasError ? errorClasses : ''}
+        ${isDragOver && !disabled && !hasError ? dragOverClasses : ''}
+        ${!hasError && !isDragOver && !disabled ? normalClasses : ''}
     `.trim()
 
     return (

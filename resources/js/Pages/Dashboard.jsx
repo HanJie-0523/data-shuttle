@@ -3,11 +3,15 @@ import { Head } from '@inertiajs/react'
 import FilesDataTable from '@/Components/FilesDataTable'
 import DragDropFileUpload from '@/Components/DragDropFileUpload'
 import { Button } from '@/Components/ui/button'
-import { useForm } from '@inertiajs/react'
+import { useForm, usePoll } from '@inertiajs/react'
 
 export default function Dashboard({ files }) {
-    const { data, setData, post, reset } = useForm({
+    const { data, setData, post, reset, errors } = useForm({
         file: null,
+    })
+
+    usePoll(2000, {
+        only: ['files']
     })
 
     const submit = (e) => {
@@ -15,6 +19,10 @@ export default function Dashboard({ files }) {
         post(route('dashboard.upload-file'), {
             onSuccess: () => {
                 reset()
+            },
+            onError: (errors) => {
+                // Errors are automatically handled by Inertia
+                console.log('Upload errors:', errors)
             }
         })
     }
@@ -45,11 +53,25 @@ export default function Dashboard({ files }) {
                         </h3>
 
                         <form onSubmit={submit} className="space-y-4">
+                            {/* Display errors */}
+                            {errors.file && (
+                                <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
+                                    <div className="flex items-center space-x-2">
+                                        <svg className="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        <p className="text-sm text-red-700 font-medium">Upload Error</p>
+                                    </div>
+                                    <p className="text-sm text-red-600 mt-1">{errors.file}</p>
+                                </div>
+                            )}
+
                             <DragDropFileUpload
                                 onFileSelect={handleFileSelect}
                                 onRemoveFile={handleRemoveFile}
                                 selectedFile={data.file}
                                 accept=".csv,.txt"
+                                hasError={!!errors.file}
                             />
 
                             {data.file && (
