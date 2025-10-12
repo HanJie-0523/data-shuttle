@@ -43,7 +43,7 @@ class DashboardController extends Controller
             'error_count' => 0,
         ]);
 
-        ProcessDocument::dispatch($document);
+        ProcessDocument::dispatch($document)->onQueue('document');
 
         return redirect()->route('dashboard');
     }

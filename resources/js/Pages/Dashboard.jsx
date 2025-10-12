@@ -4,15 +4,24 @@ import FilesDataTable from '@/Components/FilesDataTable'
 import { Button } from '@/Components/ui/button'
 import { Input } from '@/Components/ui/input'
 import { useForm } from '@inertiajs/react'
+import { useRef } from 'react'
 
 export default function Dashboard({ files }) {
-    const { setData, post } = useForm({
+    const fileInputRef = useRef(null)
+    const { setData, post, reset } = useForm({
         file: null,
-    });
+    })
 
     const submit = (e) => {
         e.preventDefault()
-        post(route('dashboard.upload-file'))
+        post(route('dashboard.upload-file'), {
+            onSuccess: () => {
+                reset()
+                if (fileInputRef.current) {
+                    fileInputRef.current.value = ''
+                }
+            }
+        })
     }
 
     return (
@@ -38,7 +47,11 @@ export default function Dashboard({ files }) {
                             </span>
                             <form onSubmit={submit} className="flex gap-2" >
                                 <div>
-                                    <Input type="file"  onChange={e => setData('file', e.target.files[0])}/>
+                                    <Input
+                                        ref={fileInputRef}
+                                        type="file"
+                                        onChange={e => setData('file', e.target.files[0])}
+                                    />
                                 </div>
                                 <Button
                                     type="submit"
