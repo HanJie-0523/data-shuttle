@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\DocumentRequest;
+use App\Http\Resources\DocumentResource;
 use App\Jobs\ProcessDocument;
 use App\Models\Document;
 use Illuminate\Http\Request;
@@ -15,21 +17,18 @@ class DashboardController extends Controller
      */
     public function dashboard(Request $request): Response
     {
-        $files = Document::orderBy('created_at', 'desc')->get();
+        $documents = Document::orderBy('created_at', 'desc')->get();
 
         return Inertia::render('Dashboard', [
-            'files' => $files,
+            'files' => DocumentResource::collection($documents),
         ]);
     }
 
     /**
      * Handle CSV file upload and import products.
      */
-    public function uploadFile(Request $request)
+    public function uploadFile(DocumentRequest $request)
     {
-        $request->validate([
-            'file' => 'required|file|mimes:csv,txt',
-        ]);
 
         $file = $request->file('file');
         $fileName = time() . '_' . $file->getClientOriginalName();

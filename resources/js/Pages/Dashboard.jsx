@@ -87,7 +87,7 @@ export default function Dashboard({ files }) {
                                 </div>
                             )}
                         </form>
-                        <FilesDataTable data={files} />
+                        <FilesDataTable data={files.data} />
                     </div>
                 </div>
             </div>
