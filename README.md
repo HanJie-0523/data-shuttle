@@ -114,15 +114,6 @@ This command runs:
     php artisan queue:work --queue=document
     ```
 
-## 📋 Queue Configuration
-
-The application uses Laravel's database queue driver. Make sure to run the queue worker:
-
-```bash
-# Process jobs from the document queue
-php artisan queue:work --queue=document
-```
-
 ## 📄 File Processing
 
 ### 📁 Supported File Types
@@ -178,63 +169,6 @@ These files contain realistic product data with all required columns and can be 
 -   Test the behavior with duplicate unique keys
 -   Validate the complete import workflow
 
-## 🗄️ Database Schema
-
-### 📋 Documents Table
-
--   `id` - Primary key
--   `name` - Original filename
--   `status` - Processing status (pending, processing, completed, failed)
--   `file_path` - Storage path
--   `imported_count` - Number of records imported
--   `error_count` - Number of errors encountered
--   `created_at` - Upload timestamp
--   `updated_at` - Last update timestamp
-
-### 🛍️ Products Table
-
--   `id` - Primary key
--   `unique_key` - Unique identifier from CSV
--   `title` - Product title
--   `description` - Product description
--   `style` - Style number
--   `sanmar_mainframe_color` - Color code
--   `size` - Product size
--   `color_name` - Color name
--   `piece_price` - Price per piece
--   `created_at` - Creation timestamp
--   `updated_at` - Last update timestamp
-
-## 🌐 API Endpoints
-
-### 🔐 Authentication Routes
-
--   `GET /` - Welcome page
--   `GET /login` - User login page
--   `POST /login` - Authenticate user
--   `GET /register` - User registration page
--   `POST /register` - Create new user account
--   `POST /logout` - User logout
--   `GET /forgot-password` - Password reset request page
--   `POST /forgot-password` - Send password reset email
--   `GET /reset-password/{token}` - Password reset form
--   `POST /reset-password` - Reset user password
-
-### 📊 Dashboard Routes
-
--   `GET /dashboard` - Dashboard with file upload interface
--   `POST /dashboard/upload-file` - Upload and process file
-
-### 👤 Profile Routes
-
--   `GET /profile` - User profile edit page
--   `PATCH /profile` - Update user profile
--   `DELETE /profile` - Delete user account
-
-### 🔍 Health Check
-
--   `GET /up` - Application health status
-
 ### 🔧 Key Components
 
 -   **ProcessDocument Job**: Handles background file processing
@@ -243,13 +177,6 @@ These files contain realistic product data with all required columns and can be 
 -   **FilesDataTable**: Displays upload history
 
 ## 🔧 Troubleshooting
-
-### ⚠️ Common Issues
-
-1. **Queue not processing**: Make sure to run `php artisan queue:work --queue=document`
-2. **File upload fails**: Check file permissions on `storage/app/` directory
-3. **Database errors**: Ensure database file exists and is writable
-4. **Build errors**: Run `npm install` and `npm run build`
 
 ### 📝 Logs
 
@@ -264,14 +191,6 @@ Or check the log file:
 ```bash
 tail -f storage/logs/laravel.log
 ```
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests if applicable
-5. Submit a pull request
 
 ## 📄 License
 
