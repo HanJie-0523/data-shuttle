@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\DocumentStatus;
 use App\Http\Requests\DocumentRequest;
 use App\Http\Resources\DocumentResource;
 use App\Jobs\ProcessDocument;
@@ -36,7 +37,7 @@ class DashboardController extends Controller
 
         $document = Document::create([
             'name' => $file->getClientOriginalName(),
-            'status' => 'pending',
+            'status' => DocumentStatus::PENDING,
             'file_path' => $filePath,
             'imported_count' => 0,
             'error_count' => 0,

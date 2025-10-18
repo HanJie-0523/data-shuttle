@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Enums\DocumentStatus;
 use App\Models\Document;
 use App\Models\Product;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -27,7 +28,7 @@ class ProcessDocument implements ShouldQueue
     public function handle(): void
     {
         try {
-            $this->document->update(['status' => 'processing']);
+            $this->document->update(['status' => DocumentStatus::PROCESSING]);
 
             $filePath = $this->document->file_path;
 
@@ -74,14 +75,14 @@ class ProcessDocument implements ShouldQueue
 
             // Update document with results
             $this->document->update([
-                'status' => 'completed',
+                'status' => DocumentStatus::COMPLETED,
                 'imported_count' => $importedCount,
                 'error_count' => $errorCount,
             ]);
         } catch (\Exception $e) {
             // Update document status to failed
             $this->document->update([
-                'status' => 'failed',
+                'status' => DocumentStatus::FAILED,
                 'error_count' => $this->document->error_count + 1,
             ]);
 
