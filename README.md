@@ -1,61 +1,197 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🚀 Data Shuttle - Laravel File Processing Application
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A Laravel application for uploading and processing CSV files in the background with real-time status updates and UTF-8 character cleanup.
 
-## About Laravel
+## ✨ Features
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+-   📁 **File Upload**: Drag & drop CSV/TXT file upload interface
+-   ⚙️ **Background Processing**: Files are processed asynchronously using Laravel queues
+-   🔄 **Real-time Updates**: Live status updates using Inertia.js polling
+-   🧹 **UTF-8 Cleanup**: Automatic removal of non-UTF-8 characters and HTML entities
+-   🔒 **Data Integrity**: Prevents duplicate products using unique keys (same file can be uploaded multiple times safely)
+-   🚨 **Error Handling**: Comprehensive error tracking and reporting
+-   🎨 **Modern UI**: Built with React, Tailwind CSS, and shadcn/ui components
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 🛠️ Tech Stack
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+-   🐘 **Backend**: Laravel 12 with PHP 8.2+
+-   ⚛️ **Frontend**: React 18 with Inertia.js
+-   🎨 **Styling**: Tailwind CSS with shadcn/ui components
+-   🗄️ **Database**: MySQL
+-   📋 **Queue System**: Laravel Database Queue
+-   🔐 **Authentication**: Laravel Breeze
 
-## Learning Laravel
+## 📦 Installation
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### 📋 Prerequisites
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+-   PHP 8.2 or higher
+-   Composer
+-   Node.js 18+ and npm
+-   MySQL
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### ⚙️ Setup
 
-## Laravel Sponsors
+1. **Clone the repository**
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+    ```bash
+    git clone git@github.com:HanJie-0523/data-shuttle.git
+    cd data-shuttle
+    ```
 
-### Premium Partners
+2. **Install PHP dependencies**
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+    ```bash
+    composer install
+    ```
 
-## Contributing
+3. **Install Node.js dependencies**
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+    ```bash
+    npm install
+    ```
 
-## Code of Conduct
+4. **Environment setup**
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+    ```bash
+    cp .env.example .env
+    php artisan key:generate
+    ```
 
-## Security Vulnerabilities
+5. **Database setup**
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+    ```bash
+    # Configure your MySQL database in .env file
+    DB_CONNECTION=mysql
+    DB_HOST=127.0.0.1
+    DB_PORT=3306
+    DB_DATABASE=your_database_name
+    DB_USERNAME=your_username
+    DB_PASSWORD=your_password
 
-## License
+    # Run migrations
+    php artisan migrate
+    ```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+6. **Build assets**
+    ```bash
+    npm run build
+    ```
+
+## 🚀 Running the Application
+
+### 🛠️ Development Mode
+
+Start all services simultaneously:
+
+```bash
+npm run dev
+```
+
+This command runs:
+
+-   Laravel development server (`php artisan serve`)
+-   Queue worker (`php artisan queue:listen`)
+-   Log viewer (`php artisan pail`)
+-   Vite development server (`npm run dev`)
+
+### 🏭 Production Mode
+
+1. **Build assets**
+
+    ```bash
+    npm run build
+    ```
+
+2. **Start Laravel server**
+
+    ```bash
+    php artisan serve
+    ```
+
+3. **Start queue worker** (in a separate terminal)
+    ```bash
+    php artisan queue:work --queue=document
+    ```
+
+## 📄 File Processing
+
+### 📁 Supported File Types
+
+-   CSV files (`.csv`)
+-   Text files (`.txt`)
+
+### ⚙️ Processing Features
+
+1. **UTF-8 Cleanup**:
+
+    - Removes invalid UTF-8 bytes
+    - Decodes HTML entities (e.g., `&#174;` → `®`)
+    - Strips control characters
+    - Normalizes whitespace
+
+2. **CSV Processing**:
+
+    - Auto-detects column headers
+    - Maps CSV columns to database fields
+    - Handles missing or malformed data
+    - Creates or updates records based on unique keys
+
+3. **Data Integrity**:
+    - Same file can be uploaded multiple times
+    - Products are not duplicated
+    - File processing runs for each upload but data remains consistent
+
+### 📊 Expected CSV Format
+
+The application expects CSV files with these columns:
+
+-   `UNIQUE_KEY` - Unique identifier for each record
+-   `PRODUCT_TITLE` - Product title
+-   `PRODUCT_DESCRIPTION` - Product description
+-   `STYLE#` - Style number
+-   `SANMAR_MAINFRAME_COLOR` - Color code
+-   `SIZE` - Product size
+-   `COLOR_NAME` - Color name
+-   `PIECE_PRICE` - Price per piece
+
+### 🧪 Test Files
+
+The project includes sample CSV files for testing:
+
+-   **`app/Data/test_import.csv`** - Sample product data for initial import testing
+-   **`app/Data/test_updated.csv`** - Modified sample data with updated prices for testing data updates
+
+These files contain realistic product data with all required columns and can be used to:
+
+-   Test the file upload functionality
+-   Verify data processing and UTF-8 cleanup
+-   Test the behavior with duplicate unique keys
+-   Validate the complete import workflow
+
+### 🔧 Key Components
+
+-   **ProcessDocument Job**: Handles background file processing
+-   **DocumentRequest**: Validates file uploads
+-   **DragDropFileUpload**: React component for file uploads
+-   **FilesDataTable**: Displays upload history
+
+## 🔧 Troubleshooting
+
+### 📝 Logs
+
+View application logs:
+
+```bash
+php artisan pail
+```
+
+Or check the log file:
+
+```bash
+tail -f storage/logs/laravel.log
+```
+
+## 📄 License
+
+This project is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
