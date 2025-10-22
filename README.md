@@ -183,12 +183,6 @@ These files contain realistic product data with all required columns and can be 
 View application logs:
 
 ```bash
-php artisan pail
-```
-
-Or check the log file:
-
-```bash
 tail -f storage/logs/laravel.log
 ```
 
