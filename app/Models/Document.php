@@ -3,12 +3,14 @@
 namespace App\Models;
 
 use App\Enums\DocumentStatus;
+use App\Traits\Filterable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Document extends Model
 {
     use HasFactory;
+    use Filterable;
 
     protected $fillable = [
         'name',
@@ -25,10 +27,5 @@ class Document extends Model
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
         ];
-    }
-
-    public function scopeFilter($query, $filters)
-    {
-        return $filters->apply($query);
     }
 }
