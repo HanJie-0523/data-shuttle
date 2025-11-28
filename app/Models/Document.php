@@ -28,4 +28,9 @@ class Document extends Model
             'updated_at' => 'datetime',
         ];
     }
+
+    public function scopeFilter(Builder $query, $filters)
+    {
+        return $filters->apply($query);
+    }
 }

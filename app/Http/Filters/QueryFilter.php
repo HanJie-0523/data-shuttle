@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 abstract class QueryFilter
 {
-    protected $builder;
+    protected $query;
     protected $request;
 
     public function __construct(Request $request)
@@ -14,9 +14,9 @@ abstract class QueryFilter
         $this->request = $request;
     }
 
-    public function apply($builder)
+    public function apply($query)
     {
-        $this->builder = $builder;
+        $this->query = $query;
 
         foreach ($this->request->all() as $name => $value) {
             if (method_exists($this, $name)) {
@@ -24,6 +24,6 @@ abstract class QueryFilter
             }
         }
 
-        return $this->builder;
+        return $this->query;
     }
 }
