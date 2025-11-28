@@ -17,9 +17,9 @@ class DashboardController extends Controller
     /**
      * Display the dashboard.
      */
-    public function dashboard(DocumentFilter $filters)
+    public function dashboard(Request $request)
     {
-        $documents = Document::filter($filters)-> orderBy('created_at', 'desc')->get();
+        $documents = Document::filter(new DocumentFilter($request))->orderBy('created_at', 'desc')->get();
 
         return Inertia::render('Dashboard', [
             'files' => DocumentResource::collection($documents),
