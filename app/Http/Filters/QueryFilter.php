@@ -3,6 +3,7 @@
 namespace App\Http\Filters;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 abstract class QueryFilter
 {
@@ -11,7 +12,7 @@ abstract class QueryFilter
      *
      * @var \Illuminate\Database\Eloquent\Builder
      */
-    protected $query;
+    protected $builder;
 
     /**
      * The current HTTP request instance.
@@ -38,12 +39,12 @@ abstract class QueryFilter
      * For each request key, if a method with the same name exists
      * in the concrete filter class, it will be executed.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  \Illuminate\Database\Eloquent\Builder  $builder
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function apply($query)
+    public function apply($builder)
     {
-        $this->query = $query;
+        $this->builder = $builder;
 
         foreach ($this->request->all() as $name => $value) {
             if (method_exists($this, $name)) {
@@ -51,6 +52,33 @@ abstract class QueryFilter
             }
         }
 
-        return $this->query;
+        return $this->builder;
+    }
+
+    /**
+     * Apply sorting to the query based on the given value.
+     *
+     * The value should be a comma-separated list of sortable fields.
+     * A leading hyphen (`-`) indicates descending order; otherwise
+     * ascending order is applied.
+     *
+     * Example:
+     *   sort=name,-created_at
+     *
+     * @param  string  $value  The raw sort string from the request (e.g., "name,-created_at")
+     * @return void
+     */
+    protected function sort($value)
+    {
+        $sortables = explode(',', $value);
+
+        foreach ($sortables as $sortable) {
+            $direction = Str::startsWith($sortable, '-') ? 'desc' : 'asc';
+            $column = Str::of($sortable)->remove('-')->snake()->value();
+
+            if (in_array($column, $this->sortable)) {
+                $this->builder->orderBy($column, $direction);
+            }
+        }
     }
 }

@@ -9,12 +9,12 @@ trait Filterable
     /**
      * Apply all relevant thread filters.
      *
-     * @param  Builder  $query
+     * @param  Builder  $builder
      * @param  mixed    $filters
      * @return Builder
      */
-    public function scopeFilter(Builder $query, $filters)
+    public function scopeFilter(Builder $builder, $filters)
     {
-        return $filters->apply($query);
+        return $filters->apply($builder);
     }
 }
