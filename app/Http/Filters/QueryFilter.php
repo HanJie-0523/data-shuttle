@@ -47,8 +47,10 @@ abstract class QueryFilter
         $this->builder = $builder;
 
         foreach ($this->request->all() as $name => $value) {
-            if (method_exists($this, $name)) {
-                $this->$name($value);
+            $method = Str::camel($name);
+
+            if (method_exists($this, $method)) {
+                $this->{$method}($value);
             }
         }
 
@@ -56,20 +58,39 @@ abstract class QueryFilter
     }
 
     /**
-     * Apply sorting to the query based on the given value.
+     * Apply sorting to the query.
      *
-     * The value should be a comma-separated list of sortable fields.
-     * A leading hyphen (`-`) indicates descending order; otherwise
-     * ascending order is applied.
+     * Supports two sorting formats:
      *
-     * Example:
-     *   sort=name,-created_at
+     * 1) Separate sort & direction parameters (used by tables / UI):
+     *    ?sort=name&direction=asc
+     *    ?sort=created_at&direction=desc
      *
-     * @param  string  $value  The raw sort string from the request (e.g., "name,-created_at")
+     * 2) Comma-separated sort string with optional "-" prefix:
+     *    ?sort=name,-created_at
+     *
+     * Only columns defined in the `$sortable` whitelist are allowed.
+     * Invalid columns or directions are silently ignored.
+     *
+     * @param  string  $value  The raw sort value from the request
      * @return void
      */
     protected function sort($value)
     {
+        if ($this->request->filled('direction')) {
+            $column = Str::snake($value);
+            $direction = strtolower($this->request->get('direction', 'asc'));
+
+            if (
+                in_array($column, $this->sortable) &&
+                in_array($direction, ['asc', 'desc'])
+            ) {
+                $this->builder->orderBy($column, $direction);
+            }
+
+            return;
+        }
+
         $sortables = explode(',', $value);
 
         foreach ($sortables as $sortable) {

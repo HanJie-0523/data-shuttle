@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Enums;
+namespace App\Enums\Document;
 
-enum DocumentStatus: string
+enum Status: string
 {
     case PENDING = 'pending';
     case PROCESSING = 'processing';

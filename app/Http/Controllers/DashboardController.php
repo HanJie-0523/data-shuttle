@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\DocumentStatus;
+use App\Enums\Document\Status as DocumentStatus;
 use App\Http\Filters\DocumentFilter;
 use App\Http\Requests\DocumentRequest;
 use App\Http\Resources\DocumentResource;
@@ -19,10 +19,12 @@ class DashboardController extends Controller
      */
     public function dashboard(Request $request)
     {
-        $documents = Document::filter(new DocumentFilter($request))->orderBy('created_at', 'desc')->get();
+        $documents = Document::filter(new DocumentFilter($request))->orderBy('created_at', 'desc')
+                        ->paginate($request->input('perpage') ?? 10);
 
         return Inertia::render('Dashboard', [
-            'files' => DocumentResource::collection($documents),
+            'documents' => DocumentResource::collection($documents),
+            'filters' => $request,
         ]);
     }
 
