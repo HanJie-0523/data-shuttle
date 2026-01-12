@@ -2,6 +2,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
 import { Head } from '@inertiajs/react'
 import { Button } from '@/Components/ui/button'
 import { router } from '@inertiajs/react'
+import { toast } from 'sonner'
 
 const Show = ({ product }) => {
 
@@ -12,12 +13,22 @@ const Show = ({ product }) => {
             <div className="py-12">
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
                     <div className="flex flex-col mb-8 space-y-8">
-                        <Button
-                            className="ml-auto"
-                            onClick={() => router.get(route('products.edit', product.data.id))}
-                        >
-                            Edit
-                        </Button>
+                        <div className="ml-auto flex gap-1">
+                            <Button
+                                onClick={() => router.delete(route('products.destroy', product.data.id), {
+                                    onSuccess: () => {
+                                        toast.success("Product has been deleted.")
+                                    },
+                                })}
+                            >
+                                Delete
+                            </Button>
+                            <Button
+                                onClick={() => router.get(route('products.edit', product.data.id))}
+                            >
+                                Edit
+                            </Button>
+                        </div>
                         <div className="flex flex-col gap-6">
                             <span className="text-3xl">
                                Product #{product.data.id}

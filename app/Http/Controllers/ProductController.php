@@ -18,7 +18,6 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $products = Product::filter(new ProductFilter($request))
-                        ->latest()
                         ->paginate($request->input('perpage') ?? 10);
 
         return Inertia::render('Products/Index', [

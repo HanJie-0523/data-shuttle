@@ -5,6 +5,7 @@ import { router } from '@inertiajs/react'
 import { useMemo } from 'react'
 import DataTable from '@/Components/DataTable'
 import useTableQuery from '@/Hooks/useTableQuery'
+import { toast } from 'sonner'
 
 const Index = ({ products }) => {
     const { sort, direction, filters } = useTableQuery()
@@ -56,6 +57,31 @@ const Index = ({ products }) => {
                     )
                 },
                 sortable: true
+            },
+            {
+                header: 'Action',
+                cell: ({ row }) => {
+                    const { id } = row.original
+
+                    return (
+                        <div className="flex gap-1">
+                            <Button
+                                onClick={() => router.delete(route('products.destroy', id), {
+                                    onSuccess: () => {
+                                        toast.success("Product has been deleted.")
+                                    },
+                                })}
+                            >
+                                Delete
+                            </Button>
+                            <Button
+                                onClick={() => router.get(route('products.show', id))}
+                            >
+                                View
+                            </Button>
+                        </div>
+                    )
+                },
             },
         ],
         []
