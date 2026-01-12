@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Enums\DocumentStatus;
+use App\Enums\Document\Status as DocumentStatus;
 use App\Traits\Filterable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;

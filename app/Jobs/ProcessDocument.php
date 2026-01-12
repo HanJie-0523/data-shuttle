@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Enums\DocumentStatus;
+use App\Enums\Document\Status as DocumentStatus;
 use App\Models\Document;
 use App\Models\Product;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -122,13 +122,10 @@ class ProcessDocument implements ShouldQueue
         // Define the columns we need and their CSV header names
         $requiredColumns = [
             'unique_key' => 'UNIQUE_KEY',
-            'title' => 'PRODUCT_TITLE',
+            'name' => 'PRODUCT_TITLE',
             'description' => 'PRODUCT_DESCRIPTION',
-            'style' => 'STYLE#',
-            'sanmar_mainframe_color' => 'SANMAR_MAINFRAME_COLOR',
-            'size' => 'SIZE',
-            'color_name' => 'COLOR_NAME',
-            'piece_price' => 'PIECE_PRICE',
+            'color' => 'COLOR_NAME',
+            'price' => 'PIECE_PRICE',
         ];
 
         foreach ($headerRow as $index => $header) {

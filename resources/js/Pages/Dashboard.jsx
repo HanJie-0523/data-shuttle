@@ -1,17 +1,19 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
 import { Head } from '@inertiajs/react'
-import FilesDataTable from '@/Components/FilesDataTable'
 import DragDropFileUpload from '@/Components/DragDropFileUpload'
 import { Button } from '@/Components/ui/button'
 import { useForm, usePoll } from '@inertiajs/react'
+import DataTable from '@/Components/DataTable'
+import { useMemo } from 'react'
+import { Badge } from '@/Components/ui/badge'
 
-export default function Dashboard({ files }) {
+const Dashboard = ({ documents }) => {
     const { data, setData, post, reset, errors } = useForm({
         file: null,
     })
 
     const { start } = usePoll(2000, {
-        only: ['files'],
+        only: ['documents'],
     }, {
         autoStart: false}
     )
@@ -37,14 +39,75 @@ export default function Dashboard({ files }) {
         setData('file', null)
     }
 
+    const columns = useMemo(
+        () => [
+            {
+                accessorKey: 'created_at',
+                header: 'Upload Time',
+                cell: ({ getValue }) => {
+                    const date = new Date(getValue())
+                    return (
+                        <div className="text-sm text-gray-900">
+                            {date.toLocaleDateString()} {date.toLocaleTimeString()}
+                        </div>
+                    )
+                },
+            },
+            {
+                accessorKey: 'name',
+                header: 'File Name',
+                cell: ({ getValue }) => (
+                    <div className="text-sm font-medium text-gray-900">
+                        {getValue()}
+                    </div>
+                ),
+            },
+            {
+                accessorKey: 'imported_count',
+                header: 'Imported Count',
+                cell: ({ getValue }) => (
+                    <div className="text-sm font-medium text-gray-900">
+                        {getValue()}
+                    </div>
+                ),
+            },
+            {
+                accessorKey: 'error_count',
+                header: 'Error Count',
+                cell: ({ getValue }) => (
+                    <div className="text-sm font-medium text-gray-900">
+                        {getValue()}
+                    </div>
+                ),
+            },
+            {
+                accessorKey: 'status',
+                header: 'Status',
+                cell: ({ getValue }) => {
+                    const status = getValue()
+                    const statusConfig = {
+                        pending: { variant: 'secondary', label: 'Pending', className: 'bg-yellow-400 text-black hover:bg-yellow-500' },
+                        processing: { variant: 'default', label: 'Processing', className: 'bg-blue-500 text-white hover:bg-blue-600' },
+                        completed: { variant: 'default', label: 'Completed', className: 'bg-green-500 text-white hover:bg-green-600' },
+                        failed: { variant: 'destructive', label: 'Failed', className: 'bg-red-500 text-white hover:bg-red-600' },
+                    }
+
+                    const config = statusConfig[status] || { variant: 'secondary', label: status, className: 'bg-gray-500 text-white hover:bg-gray-600' }
+
+                    return (
+                        <Badge variant={config.variant} className={config.className}>
+                            {config.label}
+                        </Badge>
+                    )
+                },
+            },
+
+        ],
+        []
+    )
+
     return (
-        <AuthenticatedLayout
-            header={
-                <h2 className="text-xl font-semibold leading-tight text-gray-800">
-                    Dashboard
-                </h2>
-            }
-        >
+        <>
             <Head title="Dashboard" />
 
             <div className="py-12">
@@ -87,10 +150,25 @@ export default function Dashboard({ files }) {
                                 </div>
                             )}
                         </form>
-                        <FilesDataTable data={files.data} />
+                        <DataTable
+                            data={documents.data}
+                            columns={columns}
+                            emptyMessage="No files found."
+                        />
                     </div>
                 </div>
             </div>
-        </AuthenticatedLayout>
+        </>
     )
 }
+
+Dashboard.layout = (page) =>
+    <AuthenticatedLayout header={
+        <h2 className="text-xl font-semibold leading-tight text-gray-800">
+            Dashboard
+        </h2>
+    }>
+        {page}
+    </AuthenticatedLayout>
+
+export default Dashboard

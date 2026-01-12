@@ -2,19 +2,20 @@
 
 namespace App\Models;
 
+use App\Traits\Filterable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
 {
+    use SoftDeletes, Filterable;
+
     protected $fillable = [
         'unique_key',
-        'title',
+        'name',
         'description',
-        'style',
-        'sanmar_mainframe_color',
-        'size',
-        'color_name',
-        'piece_price'
+        'color',
+        'price'
     ];
 
     protected $casts = [

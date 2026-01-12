@@ -14,14 +14,12 @@ return new class extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->string('unique_key')->unique();
-            $table->string('title');
-            $table->text('description');
-            $table->string('style');
-            $table->string('sanmar_mainframe_color');
-            $table->string('size');
-            $table->string('color_name');
-            $table->string('piece_price');
+            $table->string('name');
+            $table->text('description')->nullable();
+            $table->string('color');
+            $table->string('price');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
