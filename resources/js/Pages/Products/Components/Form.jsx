@@ -76,7 +76,7 @@ export default function Form({data, setData, submit, errors, isDirty, reset}) {
             </FieldGroup>
 
             <div className="flex justify-between gap-1 mt-6">
-                <Button variants="outline" type="button" onClick={reset}>
+                <Button variants="outline" type="button" onClick={() => reset()}>
                     Reset
                 </Button>
                 <div className="flex gap-1">

@@ -76,6 +76,13 @@ const Show = ({ product }) => {
                                 </div>
                             </div>
                         </div>
+                        <div>
+                            <Button
+                               onClick={() => window.history.back()}
+                            >
+                                Back
+                            </Button>
+                        </div>
                     </div>
                 </div>
             </div>
