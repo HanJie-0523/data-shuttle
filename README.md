@@ -149,9 +149,6 @@ The application expects CSV files with these columns:
 -   `UNIQUE_KEY` - Unique identifier for each record
 -   `PRODUCT_TITLE` - Product title
 -   `PRODUCT_DESCRIPTION` - Product description
--   `STYLE#` - Style number
--   `SANMAR_MAINFRAME_COLOR` - Color code
--   `SIZE` - Product size
 -   `COLOR_NAME` - Color name
 -   `PIECE_PRICE` - Price per piece
 
