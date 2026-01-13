@@ -10,6 +10,8 @@ class ProductFilter extends QueryFilter
         'id',
         'name',
         'color',
+        'price',
+        'created_at'
     ];
 
     public function name($value)

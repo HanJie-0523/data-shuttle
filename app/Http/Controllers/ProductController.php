@@ -15,9 +15,9 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index(Request $request, ProductFilter $filter)
     {
-        $products = Product::filter(new ProductFilter($request))
+        $products = Product::filter($filter)
                         ->paginate($request->input('perpage') ?? 10);
 
         return Inertia::render('Products/Index', [
